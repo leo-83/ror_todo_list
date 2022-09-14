@@ -1,47 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import ListForm from './ListForm';
 
-const ListForm = ({ addList, id, title, desc, updateList, setEdit }) => {
-  const [list, setList] = useState({ title: '', desc: '' })
-
-  useEffect( () => {
-    if (id) {
-      setList({ title, desc })
-    }
-  }, [])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (id) {
-      updateList(id, list)
-      setEdit(false)
-    } else {
-      addList(list)
-    }
-    setList({ title: '', desc: '' })
-  }
+const ListShow = ({ id, title, desc, updateList, deleteList }) => {
+  const [editing, setEdit] = useState(false)
 
   return (
     <>
-      <h1>{ id ? 'Edit' : 'Create'} List</h1>
-      <form onSubmit={handleSubmit}>
-        <input 
-          name='title'
-          value={list.title}
-          onChange={(e) => setList({ ...list, title: e.target.value })}
-          required
-          placeholder='List name'
-        />
-        <textarea
-          name='desc'
-          value={list.desc}
-          onChange={(e) => setList({ ...list, desc: e.target.value })}
-          required
-          placeholder='description'
-        ></textarea>
-        <button type='submit'>Submit</button>
-      </form>
+      { editing ?
+        <>
+          <ListForm 
+            updateList={updateList}
+            id={id}
+            title={title}
+            desc={desc}
+            setEdit={setEdit}
+          />
+          <button onClick={() => setEdit(false)}>
+            Cancel
+          </button>
+        </>
+        :
+        <div>
+          <h1> {title} {desc}</h1>
+          <button onClick={() => setEdit(true)}>
+            Edit
+          </button>
+          <button onClick={() => deleteList(id)}>
+            Delete
+          </button>
+          <button>Todos</button>
+        </div>
+      }
+      <hr />
     </>
   )
 }
 
-export default ListForm;
+export default ListShow;
