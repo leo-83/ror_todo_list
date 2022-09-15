@@ -1,5 +1,5 @@
 class Todo < ApplicationRecord
   belongs_to :list
-
-validates :title, :rating, presence: true
+  has_many :notes, dependent: :destroy
+  validates :title, :rating, presence: true 
 end
